@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import argparse
@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
 from colorama import init, Fore
+from bokeh.palettes import Category10
 
 import add_path
 from trajectory import Trajectory
@@ -25,13 +26,13 @@ rc('font', **{'family': 'serif', 'serif': ['Cardo']})
 rc('text', usetex=True)
 
 FORMAT = '.pdf'
+GT_NAME = 'Gt (FAST-LIO-SLAM)'
 
 def spec(N):                                             
     t = np.linspace(-510, 510, N)                                              
     return np.round(np.clip(np.stack([-t, 510-np.abs(t), t], axis=1), 0, 255)).astype("float32")/255
 
-PALLETE = spec(20)
-
+PALLETE = Category10[10]
 
 def collect_odometry_error_per_dataset(dataset_multierror_list,
                                        dataset_names):
@@ -203,7 +204,7 @@ def plot_trajectories(dataset_trajectories_list, dataset_names, algorithm_names,
                                          xlabel='x [m]', ylabel='y [m]')
                 pu.plot_trajectory_top(ax_i, p_es_0[alg], 'b',
                                        'Estimate ' + plot_settings['algo_labels'][alg], 0.5)
-                pu.plot_trajectory_top(ax_i, p_gt_0[alg], 'm', 'Groundtruth')
+                pu.plot_trajectory_top(ax_i, p_gt_0[alg], 'm', GT_NAME)
                 if plot_aligned:
                     pu.plot_aligned_top(ax_i, p_es_0[alg], p_gt_0[alg], -1)
                 plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
@@ -216,7 +217,7 @@ def plot_trajectories(dataset_trajectories_list, dataset_names, algorithm_names,
                                    plot_settings['algo_colors'][alg],
                                    plot_settings['algo_labels'][alg])
         plt.sca(ax)
-        pu.plot_trajectory_top(ax, p_gt_raw, 'm', 'Groundtruth')
+        pu.plot_trajectory_top(ax, p_gt_raw, 'm', GT_NAME)
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         fig.tight_layout()
         fig.savefig(output_dir+'/' + dataset_nm +
@@ -238,7 +239,7 @@ def plot_trajectories(dataset_trajectories_list, dataset_names, algorithm_names,
                                          xlabel='x [m]', ylabel='y [m]')
                 pu.plot_trajectory_side(ax_i, p_es_0[alg], 'b',
                                         'Estimate ' + plot_settings['algo_labels'][alg], 0.5)
-                pu.plot_trajectory_side(ax_i, p_gt_0[alg], 'm', 'Groundtruth')
+                pu.plot_trajectory_side(ax_i, p_gt_0[alg], 'm', GT_NAME)
                 plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
                 fig_i.tight_layout()
                 fig_i.savefig(output_dir+'/' + dataset_nm + '_trajectory_side_' +
@@ -249,7 +250,7 @@ def plot_trajectories(dataset_trajectories_list, dataset_names, algorithm_names,
                                     plot_settings['algo_colors'][alg],
                                     plot_settings['algo_labels'][alg])
         plt.sca(ax)
-        pu.plot_trajectory_side(ax, p_gt_raw, 'm', 'Groundtruth')
+        pu.plot_trajectory_side(ax, p_gt_raw, 'm', GT_NAME)
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         fig.tight_layout()
         fig.savefig(output_dir+'/'+dataset_nm +

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import argparse
@@ -20,6 +20,7 @@ rc('font', **{'family': 'serif', 'serif': ['Cardo']})
 rc('text', usetex=True)
 
 FORMAT = '.pdf'
+GT_NAME = 'Gt (FAST-LIO-SLAM)'
 
 
 def analyze_multiple_trials(results_dir, est_type, n_trials,
@@ -174,7 +175,7 @@ if __name__ == '__main__':
         ax = fig.add_subplot(111, aspect='equal',
                              xlabel='x [m]', ylabel='y [m]')
         pu.plot_trajectory_top(ax, plot_traj.p_es_aligned, 'b', 'Estimate')
-        pu.plot_trajectory_top(ax, plot_traj.p_gt, 'm', 'Groundtruth')
+        pu.plot_trajectory_top(ax, plot_traj.p_gt, 'm', GT_NAME)
         pu.plot_aligned_top(ax, plot_traj.p_es_aligned, plot_traj.p_gt,
                             plot_traj.align_num_frames)
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
@@ -186,7 +187,7 @@ if __name__ == '__main__':
         ax = fig.add_subplot(111, aspect='equal',
                              xlabel='x [m]', ylabel='z [m]')
         pu.plot_trajectory_side(ax, plot_traj.p_es_aligned, 'b', 'Estimate')
-        pu.plot_trajectory_side(ax, plot_traj.p_gt, 'm', 'Groundtruth')
+        pu.plot_trajectory_side(ax, plot_traj.p_gt, 'm', GT_NAME)
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         fig.tight_layout()
         fig.savefig(plot_dir_i+'/trajectory_side' + '_' + plot_traj.align_str +

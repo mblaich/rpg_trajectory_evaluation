@@ -135,6 +135,7 @@ class Trajectory:
                 self.data_dir, nm_gt, nm_est,
                 os.path.join(Trajectory.saved_res_dir_nm, self.est_type,
                              nm_matches),
+                max_diff=0.5,
                 start_t_sec=self.start_time_sec, end_t_sec=self.end_time_sec)
         self.t_gt_raw, self.p_gt_raw, self.q_gt_raw =\
             traj_loading.load_raw_groundtruth(self.data_dir, nm_gt,

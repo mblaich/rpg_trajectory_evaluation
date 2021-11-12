@@ -42,7 +42,7 @@ def boxplot_compare(ax, xlabels,
         # print("Positions: {0}".format(positions))
         bp = ax.boxplot(d, 0, '', positions=positions, widths=widths)
         color_box(bp, data_colors[idx])
-        tmp, = plt.plot([1, 1], c=data_colors[idx], alpha=0)
+        tmp, = plt.plot([], [], c=data_colors[idx], alpha=1)
         leg_handles.append(tmp)
         leg_labels.append(data_labels[idx])
         idx += 1
@@ -58,19 +58,21 @@ def boxplot_compare(ax, xlabels,
     map(lambda x: x.set_visible(False), leg_handles)
 
 
-def plot_trajectory_top(ax, pos, color, name, alpha=1.0):
+def plot_trajectory_top(ax, pos, color, name, alpha=1.0, line_width=1.0):
     ax.grid(ls='--', color='0.7')
     # pos_0 = pos - pos[0, :]
-    ax.plot(pos[:, 0], pos[:, 1], color, linestyle='-', alpha=alpha, label=name)
+    ax.plot(pos[:, 0], pos[:, 1], color, linestyle='-', alpha=alpha, linewidth=line_width, label=name)
+    ax.axis('equal')
 
 
-def plot_trajectory_side(ax, pos, color, name, alpha=1.0):
+def plot_trajectory_side(ax, pos, color, name, alpha=1.0, line_width=1.0):
     ax.grid(ls='--', color='0.7')
     # pos_0 = pos - pos[0, :]
-    ax.plot(pos[:, 0], pos[:, 2], color, linestyle='-', alpha=alpha, label=name)
+    ax.plot(pos[:, 0], pos[:, 2], color, linestyle='-', alpha=alpha, linewidth=line_width, label=name)
+    ax.axis('equal')
 
 
-def plot_aligned_top(ax, p_gt, p_es, n_align_frames):
+def plot_aligned_top(ax, p_gt, p_es, n_align_frames, line_width=1.0):
     if n_align_frames <= 0:
         n_align_frames = p_es.shape[0]
     # p_es_0 = p_es - p_gt[0, :]
@@ -79,8 +81,8 @@ def plot_aligned_top(ax, p_gt, p_es, n_align_frames):
         # 'g-', linewidth=2, label='aligned')
     for (x1, y1, z1), (x2, y2, z2) in zip(
             p_es[:n_align_frames:10, :], p_gt[:n_align_frames:10, :]):
-        ax.plot([x1, x2], [y1, y2], '-', color="gray")
-
+        ax.plot([x1, x2], [y1, y2], '-', linewidth=line_width, color="gray")
+        ax.axis('equal')
 
 def plot_error_n_dim(ax, distances, errors, results_dir,
                      colors=['r', 'g', 'b'],
