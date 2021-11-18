@@ -47,6 +47,8 @@ def alignPositionYaw(p_es, p_gt, q_es, q_gt, n_aligned=1):
         gt_pos = p_gt[idxs, 0:3]
         _, R, t = align.align_umeyama(gt_pos, est_pos, known_scale=True,
                                       yaw_only=True)  # note the order
+        # M = tfs.superimposition_matrix(gt_pos, est_pos)
+        _, R, t = tfs.superimposition_matrix(gt_pos, est_pos)
         t = np.array(t)
         t = t.reshape((3, ))
         R = np.array(R)

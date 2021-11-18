@@ -1184,17 +1184,21 @@ def superimposition_matrix(v0, v1, scaling=False, usesvd=True):
         M = quaternion_matrix(q)
 
     # scale: ratio of rms deviations from centroid
+    s = 1
     if scaling:
         v0 *= v0
         v1 *= v1
-        M[:3, :3] *= math.sqrt(numpy.sum(v1) / numpy.sum(v0))
+        s = math.sqrt(numpy.sum(v1) / numpy.sum(v0))
+        # M[:3, :3] *= math.sqrt(numpy.sum(v1) / numpy.sum(v0))
 
     # translation
     M[:3, 3] = t1
     T = numpy.identity(4)
     T[:3, 3] = -t0
     M = numpy.dot(M, T)
-    return M
+    # return M
+    # return 1, numpy.identity(3), numpy.array([0, 0, 0])
+    return s, M[:3,:3], M[:3, 3]
 
 
 def euler_matrix(ai, aj, ak, axes='sxyz'):
