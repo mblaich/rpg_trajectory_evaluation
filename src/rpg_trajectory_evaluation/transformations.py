@@ -1196,9 +1196,7 @@ def superimposition_matrix(v0, v1, scaling=False, usesvd=True):
     T = numpy.identity(4)
     T[:3, 3] = -t0
     M = numpy.dot(M, T)
-    # return M
-    # return 1, numpy.identity(3), numpy.array([0, 0, 0])
-    return s, M[:3,:3], M[:3, 3]
+    return M
 
 
 def euler_matrix(ai, aj, ak, axes='sxyz'):

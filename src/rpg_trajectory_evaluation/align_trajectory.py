@@ -77,3 +77,39 @@ def align_umeyama(model, data, known_scale=False, yaw_only=False):
     t = mu_M-s*np.dot(R, mu_D)
 
     return s, R, t
+
+def align_horn(model,data):
+    """Align two trajectories using the method of Horn (closed-form).
+
+    Input:
+    model -- first trajectory (3xn)
+    data -- second trajectory (3xn)
+
+    Output:
+    rot -- rotation matrix (3x3)
+    trans -- translation vector (3x1)
+    trans_error -- translational error per point (1xn)
+
+    """
+    model = np.asmatrix(model.transpose())
+    data = np.asmatrix(data.transpose())
+
+    model_zerocentered = model - model.mean(1)
+    data_zerocentered = data - data.mean(1)
+
+    W = np.zeros( (3,3) )
+    for column in range(model.shape[1]):
+        W += np.outer(data_zerocentered[:,column],model_zerocentered[:,column])
+    U,d,Vh = np.linalg.linalg.svd(W.transpose())
+    S = np.matrix(np.identity( 3 ))
+    if(np.linalg.det(U) * np.linalg.det(Vh)<0):
+        S[2,2] = -1
+    rot = U*S*Vh
+    trans = model.mean(1) - rot * data.mean(1)
+
+    data_aligned = rot * data + trans
+    alignment_error = data_aligned - model
+
+    trans_error = np.sqrt(np.sum(np.multiply(alignment_error,alignment_error),0)).A[0]
+
+    return rot,trans,trans_error
